@@ -1,27 +1,29 @@
-// @ts-ignore
-import logo from './logo.svg';
-import './App.css';
-import React from 'react';
+// src/App.tsx
 
-function App() {
+import React from 'react';
+import './App.css';
+import Modalicious from './components/Modalicious';
+
+const App: React.FC = () => {
+  const modalOptions = {
+    position: 'top-center',
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    theme: 'light',
+    transition: 'Bounce'
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <div className="App">
+        <Modalicious options={modalOptions}>
+          <h1>Welcome to Modalicious</h1>
+          <p>This is a test modal using the Modalicious component!</p>
+        </Modalicious>
+      </div>
   );
-}
+};
 
 export default App;
