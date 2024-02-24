@@ -1,29 +1,33 @@
-// src/App.tsx
-
-import React from 'react';
-import './App.css';
+import React, { useState } from 'react';
 import Modalicious from './components/Modalicious';
 
 const App: React.FC = () => {
-  const modalOptions = {
-    position: 'top-center',
-    autoClose: 5000,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    theme: 'light',
-    transition: 'Bounce'
-  };
 
-  return (
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const toggleModal = () => {
+        setIsModalOpen(!isModalOpen);
+    };
+
+    return (
       <div className="App">
-        <Modalicious options={modalOptions}>
-          <h1>Welcome to Modalicious</h1>
-          <p>This is a test modal using the Modalicious component!</p>
-        </Modalicious>
+        <button onClick={toggleModal}>Open Modal</button>
+        {isModalOpen && (
+            <Modalicious
+                options={{
+                  position: 'top-center',
+                  backgroundFade: true,
+                  priority: false,
+                  width: '300px',
+                  height: '200px'
+                }}
+            >
+              <h2>This is the Modalicious Popup</h2>
+              <p>You can add any content here.</p>
+            </Modalicious>
+        )}
       </div>
-  );
-};
+    );
+}
 
 export default App;
