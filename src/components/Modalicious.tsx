@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 
 interface ModaliciousProps {
     children: React.ReactNode;
     options: ModaliciousOptions;
+    onClose: () => void;
 }
 
 interface ModaliciousOptions {
@@ -21,7 +22,7 @@ interface ModaliciousOptions {
     priority?: boolean;
 }
 
-const Modalicious: React.FC<ModaliciousProps> = ({ children, options }) => {
+const Modalicious: React.FC<ModaliciousProps> = ({ children, options , onClose}) => {
     const [isOpen, setIsOpen] = useState(true);
 
     const handleClose = () => {
@@ -35,6 +36,22 @@ const Modalicious: React.FC<ModaliciousProps> = ({ children, options }) => {
     // Apply default options
     const { position = 'top-right', autoClose = 5000, hideProgressBar = false, closeOnClick = true, pauseOnHover = true, draggable = true, progress = undefined, theme = 'light', transition = 'Bounce', width = '300px', height = '200px', backgroundFade = false, priority = false   } = options;
 
+    useEffect(() => {
+        // Handle Escape key press to close the modal
+        const handleEscapeKeyPress = (event: KeyboardEvent) => {
+            if (event.key === 'Escape') {
+                onClose();
+            }
+        };
+
+        document.addEventListener('keydown', handleEscapeKeyPress);
+
+        return () => {
+            document.removeEventListener('keydown', handleEscapeKeyPress);
+        };
+    }, [onClose]);
+
+
     const modalStyle: React.CSSProperties = {
         width,
         height,
@@ -45,13 +62,26 @@ const Modalicious: React.FC<ModaliciousProps> = ({ children, options }) => {
         backgroundColor: 'white',
         border: '1px solid black',
         padding: '20px',
-        zIndex: priority ? 100 : 10,
-        opacity: backgroundFade ? 0.8 : 1,
+        zIndex: 1000,
+        boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.5)',
+    };
+
+    const overlayStyle: React.CSSProperties = {
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        zIndex: 999
     };
 
     return (
-        <div className={`modal ${position}`} style={modalStyle}>
-            {children}
+        <div>
+            <div className="overlay" style={overlayStyle}></div>
+            <div className={`modal ${position}`} style={modalStyle}>
+                {children}
+            </div>
         </div>
     );
 };
