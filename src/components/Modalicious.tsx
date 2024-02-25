@@ -1,11 +1,14 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
+import {useDispatch, useSelector} from "react-redux";
+import { RootState } from "../utils/store";
+import {close, open, setOptions} from "../core/modalSlice";
 
 interface ModaliciousProps {
-    options: ModaliciousOptions;
-    onClose: () => void;
+    modalOptions: ModalOptions;
 }
 
-interface ModaliciousOptions {
+export interface ModalOptions {
+    id?: string;
     position?: string;
     autoClose?: number;
     hideProgressBar?: boolean;
@@ -22,26 +25,25 @@ interface ModaliciousOptions {
     title?: string;
     content?: string;
 }
-const onClose = () => {}
-const Modalicious: React.FC<ModaliciousProps> = ({ options , onClose}) => {
-    const [isOpen, setIsOpen] = useState(true);
 
-    const handleClose = () => {
-        setIsOpen(false);
-    };
+const Modalicious: React.FC<ModaliciousProps> = ({ modalOptions }) => {
+    const { isOpen} = useSelector((state: RootState) => state.modal);
 
-    const toggleModal = () => {
-        setIsOpen(!isOpen);
-    };
+    console.log("modalicious is made");
+    const [modalOpen, setModalOpen] = useState(isOpen);
 
-    // Apply default options
-    const { position = 'top-right', autoClose = 5000, hideProgressBar = false, closeOnClick = true, pauseOnHover = true, draggable = true, progress = undefined, theme = 'light', transition = 'Bounce', width = '300px', height = '200px', backgroundFade = false, priority = false   } = options;
+    const dispatch = useDispatch();
+    dispatch(setOptions(modalOptions));
 
     useEffect(() => {
-        // Handle Escape key press to close the modal
+        setModalOpen(isOpen);
+    }, [isOpen]);
+
+    // Handle Escape key press to close the modal
+    useEffect(() => {
         const handleEscapeKeyPress = (event: KeyboardEvent) => {
             if (event.key === 'Escape') {
-                onClose();
+                dispatch(close());
             }
         };
 
@@ -50,8 +52,37 @@ const Modalicious: React.FC<ModaliciousProps> = ({ options , onClose}) => {
         return () => {
             document.removeEventListener('keydown', handleEscapeKeyPress);
         };
-    }, [onClose]);
+    }, []);
 
+    const { options} = useSelector((state: RootState) => state.modal);
+
+
+    if (!modalOpen) {
+        return null; // Return null if modal is not open
+    }
+
+
+    // Apply default options
+    const {
+        id,
+        position = 'top-right',
+        autoClose = 5000,
+        hideProgressBar = false,
+        closeOnClick = true,
+        pauseOnHover = true,
+        draggable = true,
+        progress = undefined,
+        theme = 'light',
+        transition = 'Bounce',
+        width = '300px',
+        height = '200px',
+        backgroundFade = false,
+        priority = false
+    } = options;
+
+    const onClose = () => {
+        // Dispatch action to close modal here
+    };
 
     const modalStyle: React.CSSProperties = {
         width,
@@ -79,10 +110,11 @@ const Modalicious: React.FC<ModaliciousProps> = ({ options , onClose}) => {
 
     return (
         <div>
-            <div className="overlay" style={overlayStyle}></div>
-            <div className={`modal ${position}`} style={modalStyle}>
+            <div className="overlay" style={overlayStyle} onClick={() => dispatch(close())}></div>
+            <div className="modal" style={modalStyle}>
                 {options.title && <h2>{options.title}</h2>}
                 {options.content && <p>{options.content}</p>}
+                <button onClick={() => dispatch(close())}>Close</button>
             </div>
         </div>
     );
