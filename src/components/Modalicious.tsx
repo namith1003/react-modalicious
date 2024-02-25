@@ -4,7 +4,6 @@ import { RootState } from "../utils/store";
 import {close, open, setOptions} from "../core/modalSlice";
 
 interface ModaliciousProps {
-    modalOptions: ModalOptions;
 }
 
 export interface ModalOptions {
@@ -26,14 +25,13 @@ export interface ModalOptions {
     content?: string;
 }
 
-const Modalicious: React.FC<ModaliciousProps> = ({ modalOptions }) => {
+const Modalicious: React.FC<ModaliciousProps> = ({ }) => {
     const { isOpen} = useSelector((state: RootState) => state.modal);
 
     console.log("modalicious is made");
     const [modalOpen, setModalOpen] = useState(isOpen);
 
     const dispatch = useDispatch();
-    dispatch(setOptions(modalOptions));
 
     useEffect(() => {
         setModalOpen(isOpen);
