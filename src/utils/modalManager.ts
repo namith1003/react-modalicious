@@ -3,6 +3,7 @@ import { RootState } from './store';
 import {open, setOptions} from "../core/modalSlice"; // Assuming ModalAction is the type for your openModal action
 
 interface ModalOptions {
+    id: string;
     position?: string;
     backgroundFade?: boolean;
     priority?: boolean;
@@ -20,7 +21,7 @@ export function OpenModal(modalOptions: ModalOptions){
     console.log(isOpen, options);
     const dispatch = useDispatch();
     dispatch(setOptions(modalOptions));
-    dispatch(open());
+    dispatch(open(modalOptions.id));
     console.log("modal opened");
 }
 

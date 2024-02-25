@@ -55,6 +55,7 @@ const Modalicious: React.FC<ModaliciousProps> = ({ modalOptions }) => {
     }, []);
 
     const { options} = useSelector((state: RootState) => state.modal);
+    const { id} = useSelector((state: RootState) => state.modal);
 
 
     if (!modalOpen) {
@@ -64,7 +65,6 @@ const Modalicious: React.FC<ModaliciousProps> = ({ modalOptions }) => {
 
     // Apply default options
     const {
-        id,
         position = 'top-right',
         autoClose = 5000,
         hideProgressBar = false,
@@ -114,6 +114,7 @@ const Modalicious: React.FC<ModaliciousProps> = ({ modalOptions }) => {
             <div className="modal" style={modalStyle}>
                 {options.title && <h2>{options.title}</h2>}
                 {options.content && <p>{options.content}</p>}
+                {id && <p>{id}</p>}
                 <button onClick={() => dispatch(close())}>Close</button>
             </div>
         </div>
