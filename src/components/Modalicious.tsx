@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 
 interface ModaliciousProps {
-    children: React.ReactNode;
     options: ModaliciousOptions;
     onClose: () => void;
 }
@@ -20,9 +19,11 @@ interface ModaliciousOptions {
     height?: string;
     backgroundFade?: boolean;
     priority?: boolean;
+    title?: string;
+    content?: string;
 }
-
-const Modalicious: React.FC<ModaliciousProps> = ({ children, options , onClose}) => {
+const onClose = () => {}
+const Modalicious: React.FC<ModaliciousProps> = ({ options , onClose}) => {
     const [isOpen, setIsOpen] = useState(true);
 
     const handleClose = () => {
@@ -80,7 +81,8 @@ const Modalicious: React.FC<ModaliciousProps> = ({ children, options , onClose})
         <div>
             <div className="overlay" style={overlayStyle}></div>
             <div className={`modal ${position}`} style={modalStyle}>
-                {children}
+                {options.title && <h2>{options.title}</h2>}
+                {options.content && <p>{options.content}</p>}
             </div>
         </div>
     );

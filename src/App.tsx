@@ -1,37 +1,31 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Modalicious from './components/Modalicious';
+import useModal from './components/useModal';
 
 const App: React.FC = () => {
+    const { isOpen, openModal, closeModal, options } = useModal();
 
-    const [modalOpen, setModalOpen] = useState(false);
-
-    const openModal = () => {
-        setModalOpen(true);
-    };
-
-    const closeModal = () => {
-        setModalOpen(false);
+    const handleOpenModal = () => {
+        openModal({
+            position: 'top-center',
+            backgroundFade: false,
+            priority: false,
+            width: '300px',
+            height: '200px',
+            title: "This is the Modalicious Popups",
+            content: "You can add any content here."
+        });
     };
 
     return (
-      <div className="App">
-        <button onClick={openModal}>Open Modal</button>
-        {modalOpen && (
-            <Modalicious
-                options={{
-                  position: 'top-center',
-                  backgroundFade: false,
-                  priority: false,
-                  width: '300px',
-                  height: '200px'
-                }}
-             onClose={closeModal}>
-              <h2>This is the Modalicious Popup</h2>
-              <p>You can add any content here.</p>
-            </Modalicious>
-        )}
-      </div>
+        <div className="App">
+            <button onClick={handleOpenModal}>Open Modal</button>
+            {isOpen && (
+                <Modalicious options={options} onClose={closeModal}>
+                </Modalicious>
+            )}
+        </div>
     );
-}
+};
 
 export default App;
