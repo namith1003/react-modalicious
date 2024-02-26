@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import { RootState } from "../utils/store";
-import {close, open, setOptions} from "../core/modalSlice";
+import {close} from "../core/modalSlice";
 
 interface ModaliciousProps {
 }
@@ -25,7 +25,7 @@ export interface ModalOptions {
     content?: string;
 }
 
-const Modalicious: React.FC<ModaliciousProps> = ({ }) => {
+const Modalicious: React.FC<ModaliciousProps> = () => {
     const { isOpen} = useSelector((state: RootState) => state.modal);
 
     console.log("modalicious is made");
@@ -77,10 +77,6 @@ const Modalicious: React.FC<ModaliciousProps> = ({ }) => {
         backgroundFade = false,
         priority = false
     } = options;
-
-    const onClose = () => {
-        // Dispatch action to close modal here
-    };
 
     const modalStyle: React.CSSProperties = {
         width,
