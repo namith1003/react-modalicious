@@ -1,35 +1,34 @@
 import React from 'react';
-import Modalicious from './components/Modalicious';
-import {useModalicious} from './hooks/useModalicious';
+import {ToastContainer} from './components';
+import {toast} from './core';
+import 'react-toastify/dist/ReactToastify.css';
+import {ToastOptions} from "./types";
 
-const App: React.FC = () => {
+function App(){
 
-    const modal1 = useModalicious({
-        position: 'top-center',
-        backgroundFade: true,
-        priority: true,
-        width: '300px',
-        height: '200px',
-        title: "111111",
-        content: "You can add any content here."
-    })
-    const modal2 = useModalicious({
-            position: 'top-center',
-            backgroundFade: true,
-            priority: true,
-            width: '300px',
-            height: '200px',
-            title: "2222222",
-            content: "You can add any content here2."
-    });
+    const options: ToastOptions = {
+        position: "top-right",
+        closeOnClick: false,
+        theme: "dark",
+        containerId: 1,
+    }
+    const options2: ToastOptions = {
+      position: "bottom-right",
+      closeOnClick: false,
+      theme: "transparent",
+      containerId: 2,
+  }
+    const notify = () => toast("Wow so easy!", options);
+    const notify2 = () => toast("Wow so easy2!", options2);
 
     return (
-        <div className="App">
-            <Modalicious/>
-            <button onClick={modal1}>Open Modal</button>
-            <button onClick={modal2}>Open Modal2</button>
-        </div>
-    );
-};
+      <div>
+        <button onClick={notify}>Notify1!</button>
+        <ToastContainer containerId={1}/>
+        <ToastContainer containerId={2}/>
+        <button onClick={notify2}>Notify2!</button>
+      </div>
+  );
+}
 
 export default App;
