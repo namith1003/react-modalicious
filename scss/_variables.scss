@@ -1,0 +1,60 @@
+$rt-namespace: 'Modalicious';
+$rt-mobile: 'only screen and (max-width : 480px)' !default;
+
+:root {
+  --modalicious-color-light: #fff;
+  --modalicious-color-dark: #121212;
+  --modalicious-color-info: #3498db;
+  --modalicious-color-success: #07bc0c;
+  --modalicious-color-warning: #f1c40f;
+  --modalicious-color-error: #e74c3c;
+  --modalicious-color-transparent: rgba(255, 255, 255, 0.7);
+
+  --modalicious-icon-color-info: var(--modalicious-color-info);
+  --modalicious-icon-color-success: var(--modalicious-color-success);
+  --modalicious-icon-color-warning: var(--modalicious-color-warning);
+  --modalicious-icon-color-error: var(--modalicious-color-error);
+
+  --modalicious-modal-width: 320px;
+  --modalicious-modal-offset: 16px;
+  --modalicious-modal-top: max(var(--modalicious-modal-offset), env(safe-area-inset-top));
+  --modalicious-modal-right: max(var(--modalicious-modal-offset), env(safe-area-inset-right));
+  --modalicious-modal-left: max(var(--modalicious-modal-offset), env(safe-area-inset-left));
+  --modalicious-modal-bottom: max(var(--modalicious-modal-offset), env(safe-area-inset-bottom));
+  --modalicious-modal-background: #fff;
+  --modalicious-modal-min-height: 64px;
+  --modalicious-modal-max-height: 800px;
+  --modalicious-modal-bd-radius: 6px;
+  --modalicious-font-family: sans-serif;
+  --modalicious-z-index: 9999;
+
+  --modalicious-text-color-light: #757575;
+  --modalicious-text-color-dark: #fff;
+
+  //Used only for colored theme
+  --modalicious-text-color-info: #fff;
+  --modalicious-text-color-success: #fff;
+  --modalicious-text-color-warning: #fff;
+  --modalicious-text-color-error: #fff;
+
+  --modalicious-spinner-color: #616161;
+  --modalicious-spinner-color-empty-area: #e0e0e0;
+
+  // Used when no type is provided
+  --modalicious-color-progress-light: linear-gradient(
+    to right,
+    #4cd964,
+    #5ac8fa,
+    #007aff,
+    #34aadc,
+    #5856d6,
+    #ff2d55
+  );
+  // Used when no type is provided
+  --modalicious-color-progress-dark: #bb86fc;
+  --modalicious-color-progress-info: var(--modalicious-color-info);
+  --modalicious-color-progress-success: var(--modalicious-color-success);
+  --modalicious-color-progress-warning: var(--modalicious-color-warning);
+  --modalicious-color-progress-error: var(--modalicious-color-error);
+  --modalicious-color-progress-bgo: 0.2;
+}

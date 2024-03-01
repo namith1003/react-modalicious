@@ -1,27 +1,27 @@
 import { ReactElement, cloneElement, isValidElement } from 'react';
 import {
   Id,
-  NotValidatedToastProps,
+  NotValidatedModalProps,
   OnChangeCallback,
-  Toast,
-  ToastContainerProps,
-  ToastContent,
-  ToastProps
+  Modal,
+  ModalContainerProps,
+  ModalContent,
+  ModalProps
 } from '../types';
 import {
   canBeRendered,
   isFn,
   isStr,
   parseClassName,
-  toToastItem
+  toModalItem
 } from '../utils';
 
 
 type Notify = () => void;
 
-interface ActiveToast {
-  content: ToastContent<any>;
-  props: ToastProps;
+interface ActiveModal {
+  content: ModalContent<any>;
+  props: ModalProps;
   staleId?: Id;
 }
 
@@ -29,14 +29,14 @@ export type ContainerObserver = ReturnType<typeof createContainerObserver>;
 
 export function createContainerObserver(
   id: Id,
-  containerProps: ToastContainerProps,
+  containerProps: ModalContainerProps,
   dispatchChanges: OnChangeCallback
 ) {
-  let toastKey = 1;
-  let activeToasts: Id[] = [];
-  let snapshot: Toast[] = [];
+  let modalKey = 1;
+  let activeModals: Id[] = [];
+  let snapshot: Modal[] = [];
   let props = containerProps;
-  const toasts = new Map<Id, Toast>();
+  const modals = new Map<Id, Modal>();
   const listeners = new Set<Notify>();
 
   const observe = (notify: Notify) => {
@@ -45,118 +45,118 @@ export function createContainerObserver(
   };
 
   const notify = () => {
-    snapshot = Array.from(toasts.values());
+    snapshot = Array.from(modals.values());
     listeners.forEach(cb => cb());
   };
 
-  const shouldIgnoreToast = ({
+  const shouldIgnoreModal = ({
     containerId,
-    toastId,
+    modalId,
     updateId
-  }: NotValidatedToastProps) => {
+  }: NotValidatedModalProps) => {
     const containerMismatch = containerId ? containerId !== id : id !== 1;
-    const isDuplicate = toasts.has(toastId) && updateId == null;
+    const isDuplicate = modals.has(modalId) && updateId == null;
 
     return containerMismatch || isDuplicate;
   };
 
   const toggle = (v: boolean, id?: Id) => {
-    toasts.forEach(t => {
-      if (id == null || id === t.props.toastId) isFn(t.toggle) && t.toggle(v);
+    modals.forEach(t => {
+      if (id == null || id === t.props.modalId) isFn(t.toggle) && t.toggle(v);
     });
   };
 
-  const removeToast = (id?: Id) => {
-    activeToasts = id == null ? [] : activeToasts.filter(v => v !== id);
+  const removeModal = (id?: Id) => {
+    activeModals = id == null ? [] : activeModals.filter(v => v !== id);
     notify();
   };
 
 
-  const addActiveToast = (toast: ActiveToast) => {
-    const { toastId, onOpen, updateId, children } = toast.props;
+  const addActiveModal = (modal: ActiveModal) => {
+    const { modalId, onOpen, updateId, children } = modal.props;
     const isNew = updateId == null;
 
-    if (toast.staleId) toasts.delete(toast.staleId);
+    if (modal.staleId) modals.delete(modal.staleId);
 
-    toasts.set(toastId, toast);
-    activeToasts = [...activeToasts, toast.props.toastId].filter(
-      v => v !== toast.staleId
+    modals.set(modalId, modal);
+    activeModals = [...activeModals, modal.props.modalId].filter(
+      v => v !== modal.staleId
     );
     notify();
-    dispatchChanges(toToastItem(toast, isNew ? 'added' : 'updated'));
+    dispatchChanges(toModalItem(modal, isNew ? 'added' : 'updated'));
 
     if (isNew && isFn(onOpen))
       onOpen(isValidElement(children) && children.props);
   };
 
-  const buildToast = <TData = unknown>(
-    content: ToastContent<TData>,
-    options: NotValidatedToastProps
+  const buildModal = <TData = unknown>(
+    content: ModalContent<TData>,
+    options: NotValidatedModalProps
   ) => {
-    if (shouldIgnoreToast(options)) return;
+    if (shouldIgnoreModal(options)) return;
 
-    const { toastId, updateId, data, staleId} = options;
-    const closeToast = () => {
-      removeToast(toastId);
+    const { modalId, updateId, data, staleId} = options;
+    const closeModal = () => {
+      removeModal(modalId);
     };
 
-    const toastProps = {
+    const modalProps = {
       ...props,
-      style: props.toastStyle,
-      key: toastKey++,
+      style: props.modalStyle,
+      key: modalKey++,
       ...Object.fromEntries(
         Object.entries(options).filter(([_, v]) => v != null)
       ),
-      toastId,
+      modalId: modalId,
       updateId,
       data,
-      closeToast,
+      closeModal: closeModal,
       isIn: false,
-      className: parseClassName(options.className || props.toastClassName),
+      className: parseClassName(options.className || props.modalClassName),
       bodyClassName: parseClassName(
         options.bodyClassName || props.bodyClassName
       ),
-      deleteToast() {
-        const toastToRemove = toasts.get(toastId)!;
-        const { onClose, children } = toastToRemove.props;
+      deleteModal() {
+        const modalToRemove = modals.get(modalId)!;
+        const { onClose, children } = modalToRemove.props;
         if (isFn(onClose)) onClose(isValidElement(children) && children.props);
 
-        dispatchChanges(toToastItem(toastToRemove, 'removed'));
-        toasts.delete(toastId);
+        dispatchChanges(toModalItem(modalToRemove, 'removed'));
+        modals.delete(modalId);
 
         notify();
       }
-    } as ToastProps;
+    } as ModalProps;
 
-    toastProps.closeButton = props.closeButton;
+    modalProps.closeButton = props.closeButton;
 
     if (options.closeButton === false || canBeRendered(options.closeButton)) {
-      toastProps.closeButton = options.closeButton;
+      modalProps.closeButton = options.closeButton;
     } else if (options.closeButton === true) {
-      toastProps.closeButton = canBeRendered(props.closeButton)
+      modalProps.closeButton = canBeRendered(props.closeButton)
         ? props.closeButton
         : true;
     }
 
-    let toastContent = content;
+    let modalContent = content;
 
     if (isValidElement(content) && !isStr(content.type)) {
-      toastContent = cloneElement(content as ReactElement, {
-        closeToast,
-        toastProps,
+      modalContent = cloneElement(content as ReactElement, {
+        closeModal: closeModal,
+        modalProps: modalProps,
         data
       });
     } else if (isFn(content)) {
-      toastContent = content({ closeToast, toastProps, data: data as TData });
+      modalContent = content({ closeModal: closeModal, modalProps: modalProps, data: data as TData });
     }
 
-    const activeToast = {
-      content: toastContent,
-      props: toastProps,
+    const activeModal = {
+      content: modalContent,
+      props: modalProps,
       staleId
     };
 
-    addActiveToast(activeToast);
+    addActiveModal(activeModal);
 
   };
 
@@ -165,16 +165,16 @@ export function createContainerObserver(
     props,
     observe,
     toggle,
-    removeToast,
-    toasts,
-    buildToast,
-    setProps(p: ToastContainerProps) {
+    removeModal: removeModal,
+    modals: modals,
+    buildModal: buildModal,
+    setProps(p: ModalContainerProps) {
       props = p;
     },
     setToggle: (id: Id, fn: (v: boolean) => void) => {
-      toasts.get(id)!.toggle = fn;
+      modals.get(id)!.toggle = fn;
     },
-    isToastActive: (id: Id) => activeToasts.some(v => v === id),
+    isModalActive: (id: Id) => activeModals.some(v => v === id),
     getSnapshot: () => (props.newestOnTop ? snapshot.reverse() : snapshot)
   };
 }

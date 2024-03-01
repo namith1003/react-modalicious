@@ -1,18 +1,18 @@
-import { Toast, ToastItem, ToastItemStatus } from '../types';
+import { Modal, ModalItem, ModalItemStatus } from '../types';
 
-export function toToastItem(toast: Toast, status: ToastItemStatus): ToastItem {
-  return toast != null
+export function toModalItem(modal: Modal, status: ModalItemStatus): ModalItem {
+  return modal != null
     ? {
-        content: toast.content,
-        containerId: toast.props.containerId,
-        id: toast.props.toastId,
-        theme: toast.props.theme,
-        type: toast.props.type,
-        data: toast.props.data || {},
-        isLoading: toast.props.isLoading,
-        icon: toast.props.icon,
+        content: modal.content,
+        containerId: modal.props.containerId,
+        id: modal.props.modalId,
+        theme: modal.props.theme,
+        type: modal.props.type,
+        data: modal.props.data || {},
+        isLoading: modal.props.isLoading,
+        icon: modal.props.icon,
         status
       }
-    : // monkey patch for now
-      ({} as ToastItem);
+    :
+      ({} as ModalItem);
 }

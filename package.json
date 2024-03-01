@@ -1,6 +1,19 @@
 {
   "name": "react-modalicious",
-  "version": "0.1.3",
+  "description": "React modal made easy",
+  "version": "0.1.7",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "homepage": "https://github.com/namith1003",
+  "repository": {
+    "url": "https://github.com/namith1003/react-modalicious"
+  },
+  "keywords": [
+    "modal"
+  ],
+  "author": "Namith Nimlaka",
+  "license": "MIT",
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
@@ -8,12 +21,11 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
-    "react-toastify": "^10.0.4",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "tsup",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -36,6 +48,9 @@
     ]
   },
   "devDependencies": {
-    "@4tw/cypress-drag-drop": "^2.2.5"
+    "@4tw/cypress-drag-drop": "^2.2.5",
+    "tsc-hooks": "^1.1.2",
+    "tsup": "^8.0.2",
+    "typescript": "^5.3.3"
   }
 }

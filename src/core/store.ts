@@ -1,11 +1,11 @@
 import {
   Id,
-  NotValidatedToastProps,
+  NotValidatedModalProps,
   OnChangeCallback,
-  ToastContainerProps,
-  ToastContent,
-  ToastItem,
-  ToastOptions
+  ModalContainerProps,
+  ModalContent,
+  ModalItem,
+  ModalOptions
 } from '../types';
 import { Default, canBeRendered} from '../utils';
 import {
@@ -13,9 +13,9 @@ import {
   createContainerObserver
 } from './containerObserver';
 
-interface EnqueuedToast {
-  content: ToastContent<any>;
-  options: NotValidatedToastProps;
+interface EnqueuedModal {
+  content: ModalContent<any>;
+  options: NotValidatedModalProps;
 }
 
 interface RemoveParams {
@@ -24,51 +24,51 @@ interface RemoveParams {
 }
 
 const containers = new Map<Id, ContainerObserver>();
-let renderQueue: EnqueuedToast[] = [];
+let renderQueue: EnqueuedModal[] = [];
 const listeners = new Set<OnChangeCallback>();
 
-const dispatchChanges = (data: ToastItem) => listeners.forEach(cb => cb(data));
+const dispatchChanges = (data: ModalItem) => listeners.forEach(cb => cb(data));
 
 const hasContainers = () => containers.size > 0;
 
 
-export const getToast = (id: Id, { containerId }: ToastOptions) =>
-  containers.get(containerId || Default.CONTAINER_ID)?.toasts.get(id);
+export const getModal = (id: Id, { containerId }: ModalOptions) =>
+  containers.get(containerId || Default.CONTAINER_ID)?.modals.get(id);
 
-export function isToastActive(id: Id, containerId?: Id) {
-  if (containerId) return !!containers.get(containerId)?.isToastActive(id);
+export function isModalActive(id: Id, containerId?: Id) {
+  if (containerId) return !!containers.get(containerId)?.isModalActive(id);
 
   let isActive = false;
   containers.forEach(c => {
-    if (c.isToastActive(id)) isActive = true;
+    if (c.isModalActive(id)) isActive = true;
   });
 
   return isActive;
 }
 
-export function removeToast(params?: Id | RemoveParams) {
+export function removeModal(params?: Id | RemoveParams) {
   if (!hasContainers()) {
     renderQueue = renderQueue.filter(
-      v => params != null && v.options.toastId !== params
+      v => params != null && v.options.modalId !== params
     );
     return;
   }
 
 }
 
-export function pushToast<TData>(
-  content: ToastContent<TData>,
-  options: NotValidatedToastProps
+export function pushModal<TData>(
+  content: ModalContent<TData>,
+  options: NotValidatedModalProps
 ) {
   if (!canBeRendered(content)) return;
   if (!hasContainers()) renderQueue.push({ content, options });
 
   containers.forEach(c => {
-    c.buildToast(content, options);
+    c.buildModal(content, options);
   });
 }
 
-interface ToggleToastParams {
+interface ToggleModalParams {
   id?: Id;
   containerId?: Id;
 }
@@ -85,7 +85,7 @@ export function registerToggle(opts: RegisterToggleOpts) {
     ?.setToggle(opts.id, opts.fn);
 }
 
-export function toggleToast(v: boolean, opt?: ToggleToastParams) {
+export function toggleModal(v: boolean, opt?: ToggleModalParams) {
   containers.forEach(c => {
     if (opt == null || !opt?.containerId) {
       c.toggle(v, opt?.id);
@@ -95,7 +95,7 @@ export function toggleToast(v: boolean, opt?: ToggleToastParams) {
   });
 }
 
-export function registerContainer(props: ToastContainerProps) {
+export function registerContainer(props: ModalContainerProps) {
   const id = props.containerId || Default.CONTAINER_ID;
   return {
     subscribe(notify: () => void) {
@@ -109,7 +109,7 @@ export function registerContainer(props: ToastContainerProps) {
         containers.delete(id);
       };
     },
-    setProps(p: ToastContainerProps) {
+    setProps(p: ModalContainerProps) {
       containers.get(id)?.setProps(p);
     },
     getSnapshot() {

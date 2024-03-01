@@ -10,7 +10,7 @@ export type TypeOptions = 'info' | 'success' | 'warning' | 'error' | 'default';
 
 export type Theme = 'light' | 'dark' | 'colored' | (string & {});
 
-export type ToastPosition =
+export type ModalPosition =
   | 'top-right'
   | 'top-center'
   | 'top-left'
@@ -18,35 +18,35 @@ export type ToastPosition =
   | 'bottom-center'
   | 'bottom-left';
 
-export interface ToastContentProps<Data = unknown> {
-  closeToast: () => void;
-  toastProps: ToastProps;
+export interface ModalContentProps<Data = unknown> {
+  closeModal: () => void;
+  modalProps: ModalProps;
   data: Data;
 }
 
-export type ToastContent<T = unknown> =
+export type ModalContent<T = unknown> =
   | React.ReactNode
-  | ((props: ToastContentProps<T>) => React.ReactNode);
+  | ((props: ModalContentProps<T>) => React.ReactNode);
 
-export type ToastIcon =
+export type ModalIcon =
   | false
   | ((props: IconProps) => React.ReactNode)
   | React.ReactElement<IconProps>;
 
 export type Id = number | string;
 
-export type ToastTransition =
-  | React.FC<ToastTransitionProps>
-  | React.ComponentClass<ToastTransitionProps>;
+export type ModalTransition =
+  | React.FC<ModalTransitionProps>
+  | React.ComponentClass<ModalTransitionProps>;
 
 /**
  * ClassName for the elements - can take a function to build a classname or a raw string that is cx'ed to defaults
  */
-export type ToastClassName =
+export type ModalClassName =
   | ((context?: {
       type?: TypeOptions;
       defaultClassName?: string;
-      position?: ToastPosition;
+      position?: ModalPosition;
       rtl?: boolean;
     }) => string)
   | string;
@@ -55,14 +55,14 @@ export type ToastClassName =
 interface CommonOptions {
 
   /**
-   * Remove the toast when clicked.
+   * Remove the modal when clicked.
    * `Default: true`
    */
   closeOnClick?: boolean;
 
   /**
-   * Set the delay in ms to close the toast automatically.
-   * Use `false` to prevent the toast from closing.
+   * Set the delay in ms to close the modal automatically.
+   * Use `false` to prevent the modal from closing.
    * `Default: 5000`
    */
   autoClose?: number | false;
@@ -72,7 +72,7 @@ interface CommonOptions {
    * `One of: 'top-right', 'top-center', 'top-left', 'bottom-right', 'bottom-center', 'bottom-left'`
    * `Default: 'top-right'`
    */
-  position?: ToastPosition;
+  position?: ModalPosition;
 
   /**
    * Pass a custom close button.
@@ -85,12 +85,12 @@ interface CommonOptions {
 
 
   /**
-   * An optional css class to set for the toast content.
+   * An optional css class to set for the modal content.
    */
-  bodyClassName?: ToastClassName;
+  bodyClassName?: ModalClassName;
 
   /**
-   * An optional inline style to apply for the toast content.
+   * An optional inline style to apply for the modal content.
    */
   bodyStyle?: React.CSSProperties;
 
@@ -98,11 +98,11 @@ interface CommonOptions {
   /**
    * Pass a custom transition
    */
-  transition?: ToastTransition;
+  transition?: ModalTransition;
 
 
   /**
-   * Define the ARIA role for the toast
+   * Define the ARIA role for the modal
    * `Default: alert`
    *  https://www.w3.org/WAI/PF/aria/roles
    */
@@ -114,7 +114,7 @@ interface CommonOptions {
   containerId?: Id;
 
   /**
-   * Fired when clicking inside toaster
+   * Fired when clicking inside modaler
    */
   onClick?: (event: React.MouseEvent) => void;
 
@@ -128,7 +128,7 @@ interface CommonOptions {
    * Used to display a custom icon. Set it to `false` to prevent
    * the icons from being displayed
    */
-  icon?: ToastIcon;
+  icon?: ModalIcon;
 
   /**
    * Theme to use.
@@ -138,19 +138,19 @@ interface CommonOptions {
   theme?: Theme;
 }
 
-export interface ToastOptions<Data = unknown> extends CommonOptions {
+export interface ModalOptions<Data = unknown> extends CommonOptions {
   /**
    * An optional css class to set.
    */
-  className?: ToastClassName;
+  className?: ModalClassName;
 
   /**
-   * Called when toast is mounted.
+   * Called when modal is mounted.
    */
   onOpen?: <T = {}>(props: T) => void;
 
   /**
-   * Called when toast is unmounted.
+   * Called when modal is unmounted.
    */
   onClose?: <T = {}>(props: T) => void;
 
@@ -160,15 +160,15 @@ export interface ToastOptions<Data = unknown> extends CommonOptions {
   style?: React.CSSProperties;
 
   /**
-   * Set the toast type.
+   * Set the modal type.
    * `One of: 'info', 'success', 'warning', 'error', 'default'`
    */
   type?: TypeOptions;
 
   /**
-   * Set a custom `toastId`
+   * Set a custom `modalId`
    */
-  toastId?: Id;
+  modalId?: Id;
 
   /**
    * Used during update
@@ -176,7 +176,7 @@ export interface ToastOptions<Data = unknown> extends CommonOptions {
   updateId?: Id;
 
   /**
-   * Add a delay in ms before the toast appear.
+   * Add a delay in ms before the modal appear.
    */
   delay?: number;
 
@@ -185,22 +185,22 @@ export interface ToastOptions<Data = unknown> extends CommonOptions {
   data?: Data;
 }
 
-export interface UpdateOptions<T = unknown> extends Nullable<ToastOptions<T>> {
+export interface UpdateOptions<T = unknown> extends Nullable<ModalOptions<T>> {
   /**
-   * Used to update a toast.
+   * Used to update a modal.
    * Pass any valid ReactNode(string, number, component)
    */
-  render?: ToastContent<T>;
+  render?: ModalContent<T>;
 }
 
-export interface ToastContainerProps extends CommonOptions {
+export interface ModalContainerProps extends CommonOptions {
   /**
    * An optional css class to set.
    */
-  className?: ToastClassName;
+  className?: ModalClassName;
 
   /**
-   * Whether or not to display the newest toast on top.
+   * Whether or not to display the newest modal on top.
    * `Default: false`
    */
   newestOnTop?: boolean;
@@ -211,47 +211,47 @@ export interface ToastContainerProps extends CommonOptions {
   style?: React.CSSProperties;
 
   /**
-   * An optional inline style to apply for the toast.
+   * An optional inline style to apply for the modal.
    */
-  toastStyle?: React.CSSProperties;
+  modalStyle?: React.CSSProperties;
 
   /**
-   * An optional css class for the toast.
+   * An optional css class for the modal.
    */
-  toastClassName?: ToastClassName;
+  modalClassName?: ModalClassName;
 
   /**
-   * Limit the number of toast displayed at the same time
+   * Limit the number of modal displayed at the same time
    */
   limit?: number;
 }
 
-export interface ToastTransitionProps {
+export interface ModalTransitionProps {
   isIn: boolean;
   done: () => void;
-  position: ToastPosition | string;
+  position: ModalPosition | string;
   preventExitTransition: boolean;
   nodeRef: React.RefObject<HTMLElement>;
   children?: React.ReactNode;
-  playToast(): void;
+  playModal(): void;
 }
 
 /**
  * @INTERNAL
  */
-export interface ToastProps extends ToastOptions {
+export interface ModalProps extends ModalOptions {
   isIn: boolean;
   staleId?: Id;
-  toastId: Id;
+  modalId: Id;
   key: Id;
-  transition: ToastTransition;
-  closeToast: () => void;
-  position: ToastPosition;
-  children?: ToastContent;
-  progressClassName?: ToastClassName;
-  className?: ToastClassName;
-  bodyClassName?: ToastClassName;
-  deleteToast: () => void;
+  transition: ModalTransition;
+  closeModal: () => void;
+  position: ModalPosition;
+  children?: ModalContent;
+  progressClassName?: ModalClassName;
+  className?: ModalClassName;
+  bodyClassName?: ModalClassName;
+  deleteModal: () => void;
   theme: Theme;
   type: TypeOptions;
 }
@@ -259,34 +259,34 @@ export interface ToastProps extends ToastOptions {
 /**
  * @INTERNAL
  */
-export interface NotValidatedToastProps extends Partial<ToastProps> {
-  toastId: Id;
+export interface NotValidatedModalProps extends Partial<ModalProps> {
+  modalId: Id;
 }
 
 /**
  * @INTERNAL
  */
-export interface Toast {
-  content: ToastContent;
-  props: ToastProps;
+export interface Modal {
+  content: ModalContent;
+  props: ModalProps;
   toggle?: (v: boolean) => void;
 }
 
-export type ToastItemStatus = 'added' | 'removed' | 'updated';
+export type ModalItemStatus = 'added' | 'removed' | 'updated';
 
-export interface ToastItem<Data = {}> {
-  content: ToastContent<Data>;
+export interface ModalItem<Data = {}> {
+  content: ModalContent<Data>;
   id: Id;
   theme?: Theme;
   type?: TypeOptions;
   isLoading?: boolean;
   containerId?: Id;
   data: Data;
-  icon?: ToastIcon;
-  status: ToastItemStatus;
+  icon?: ModalIcon;
+  status: ModalItemStatus;
 }
 
-export type OnChangeCallback = (toast: ToastItem) => void;
+export type OnChangeCallback = (modal: ModalItem) => void;
 
 export type IdOpts = {
   id?: Id;

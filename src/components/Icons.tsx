@@ -1,6 +1,6 @@
 import React, { cloneElement, isValidElement } from 'react';
 
-import { Theme, ToastProps, TypeOptions } from '../types';
+import { Theme, ModalProps, TypeOptions } from '../types';
 import { Default, isFn } from '../utils';
 
 /**
@@ -27,7 +27,7 @@ const Svg: React.FC<BuiltInIconProps> = ({
     fill={
       theme === 'colored'
         ? 'currentColor'
-        : `var(--toastify-icon-color-${type})`
+        : `var(--modalicious-icon-color-${type})`
     }
     {...rest}
   />
@@ -80,7 +80,7 @@ export const Icons = {
 const maybeIcon = (type: string): type is keyof typeof Icons => type in Icons;
 
 export type IconParams = Pick<
-  ToastProps,
+  ModalProps,
   'theme' | 'icon' | 'type' | 'isLoading'
 >;
 

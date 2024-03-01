@@ -1,22 +1,22 @@
 import React, { useEffect, useLayoutEffect, useRef } from 'react';
-import { collapseToast } from './collapseToast';
+import { collapseModal } from './collapseModal';
 import { Default } from './constant';
 
-import { ToastTransitionProps } from '../types';
+import { ModalTransitionProps } from '../types';
 
 export interface CSSTransitionProps {
   /**
-   * Css class to apply when toast enter
+   * Css class to apply when modal enter
    */
   enter: string;
 
   /**
-   * Css class to apply when toast leave
+   * Css class to apply when modal leave
    */
   exit: string;
 
   /**
-   * Append current toast position to the classname.
+   * Append current modal position to the classname.
    * If multiple classes are provided, only the last one will get the position
    * For instance `myclass--top-center`...
    * `Default: false`
@@ -24,7 +24,7 @@ export interface CSSTransitionProps {
   appendPosition?: boolean;
 
   /**
-   * Collapse toast smoothly when exit animation end
+   * Collapse modal smoothly when exit animation end
    * `Default: true`
    */
   collapse?: boolean;
@@ -61,15 +61,15 @@ export function cssTransition({
   collapse = true,
   collapseDuration = Default.COLLAPSE_DURATION
 }: CSSTransitionProps) {
-  return function ToastTransition({
+  return function ModalTransition({
     children,
     position,
     preventExitTransition,
     done,
     nodeRef,
     isIn,
-    playToast
-  }: ToastTransitionProps) {
+    playModal
+  }: ModalTransitionProps) {
     const enterClassName = appendPosition ? `${enter}--${position}` : enter;
     const exitClassName = appendPosition ? `${exit}--${position}` : exit;
     const animationStep = useRef(AnimationStep.Enter);
@@ -81,7 +81,7 @@ export function cssTransition({
       const onEntered = (e: AnimationEvent) => {
         if (e.target !== nodeRef.current) return;
 
-        playToast();
+        playModal();
         node.removeEventListener('animationend', onEntered);
         node.removeEventListener('animationcancel', onEntered);
         if (
@@ -106,7 +106,7 @@ export function cssTransition({
 
       const onExited = () => {
         node.removeEventListener('animationend', onExited);
-        collapse ? collapseToast(node, done, collapseDuration) : done();
+        collapse ? collapseModal(node, done, collapseDuration) : done();
       };
 
       const onExit = () => {

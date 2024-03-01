@@ -1,0 +1,16 @@
+@charset "UTF-8";
+
+@import 'variables';
+@import 'modalContainer';
+@import 'modal';
+@import 'theme';
+@import 'closeButton';
+@import 'progressBar';
+@import 'icons';
+
+// entrance and exit animations
+@import 'animations/bounce';
+@import 'animations/zoom';
+@import 'animations/flip';
+@import 'animations/slide';
+@import 'animations/spin';

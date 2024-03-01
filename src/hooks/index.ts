@@ -1,2 +1,2 @@
-export * from './useToastContainer';
-export * from './useToast';
+export * from './useModalContainer';
+export * from './useModal';

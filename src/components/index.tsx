@@ -1,5 +1,5 @@
 export * from './CloseButton';
-export { ToastContainer } from './ToastContainer';
+export { ModalContainer } from './ModalContainer';
 export * from './Transitions';
-export * from './Toast';
+export * from './Modal';
 export * from './Icons';

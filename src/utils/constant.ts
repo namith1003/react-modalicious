@@ -8,7 +8,7 @@ export const enum Type {
 
 export const enum Default {
   COLLAPSE_DURATION = 0,
-  CSS_NAMESPACE = 'Toastify',
+  CSS_NAMESPACE = 'Modalicious',
   CONTAINER_ID = 1
 }
 

@@ -1,0 +1,57 @@
+.#{$rt-namespace}__modal {
+  &-theme--dark {
+    background: var(--modalicious-color-dark);
+    color: var(--modalicious-text-color-dark);
+  }
+  &-theme--light {
+    background: var(--modalicious-color-light);
+    color: var(--modalicious-text-color-light);
+  }
+  &-theme--colored#{&}--default {
+    background: var(--modalicious-color-light);
+    color: var(--modalicious-text-color-light);
+  }
+  &-theme--colored#{&}--info {
+    color: var(--modalicious-text-color-info);
+    background: var(--modalicious-color-info);
+  }
+  &-theme--colored#{&}--success {
+    color: var(--modalicious-text-color-success);
+    background: var(--modalicious-color-success);
+  }
+  &-theme--colored#{&}--warning {
+    color: var(--modalicious-text-color-warning);
+    background: var(--modalicious-color-warning);
+  }
+  &-theme--colored#{&}--error {
+    color: var(--modalicious-text-color-error);
+    background: var(--modalicious-color-error);
+  }
+}
+
+.#{$rt-namespace}__progress-bar {
+  &-theme--light {
+    background: var(--modalicious-color-progress-light);
+  }
+  &-theme--dark {
+    background: var(--modalicious-color-progress-dark);
+  }
+  &--info {
+    background: var(--modalicious-color-progress-info);
+  }
+  &--success {
+    background: var(--modalicious-color-progress-success);
+  }
+  &--warning {
+    background: var(--modalicious-color-progress-warning);
+  }
+  &--error {
+    background: var(--modalicious-color-progress-error);
+  }
+  &-theme--colored#{&}--info,
+  &-theme--colored#{&}--success,
+  &-theme--colored#{&}--warning,
+  &-theme--colored#{&}--error {
+    background: var(--modalicious-color-transparent);
+  }
+}

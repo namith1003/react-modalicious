@@ -3,14 +3,14 @@ import { Default } from '../utils';
 import { Theme, TypeOptions } from '../types';
 
 export interface CloseButtonProps {
-  closeToast: (e: React.MouseEvent<HTMLElement>) => void;
+  closeModal: (e: React.MouseEvent<HTMLElement>) => void;
   type: TypeOptions;
   ariaLabel?: string;
   theme: Theme;
 }
 
 export function CloseButton({
-  closeToast,
+  closeModal,
   theme,
   ariaLabel = 'close'
 }: CloseButtonProps) {
@@ -20,7 +20,7 @@ export function CloseButton({
       type="button"
       onClick={e => {
         e.stopPropagation();
-        closeToast(e);
+        closeModal(e);
       }}
       aria-label={ariaLabel}
     >
