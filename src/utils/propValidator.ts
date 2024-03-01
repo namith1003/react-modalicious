@@ -1,0 +1,13 @@
+import { isValidElement } from 'react';
+
+export const isNum = (v: any): v is Number =>
+  typeof v === 'number' && !isNaN(v);
+
+export const isStr = (v: any): v is String => typeof v === 'string';
+
+export const isFn = (v: any): v is Function => typeof v === 'function';
+
+export const parseClassName = (v: any) => (isStr(v) || isFn(v) ? v : null);
+
+export const canBeRendered = <T>(content: T): boolean =>
+  isValidElement(content) || isStr(content) || isFn(content) || isNum(content);
